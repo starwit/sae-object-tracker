@@ -1,12 +1,13 @@
 # You must run `poetry export` before building this
 
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 RUN apt update && apt install --no-install-recommends -y \
     libglib2.0-0 \
     libgl1 \
     libturbojpeg0 \
-    git
+    git \
+    build-essential
 
 WORKDIR /code
 
