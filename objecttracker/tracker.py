@@ -4,8 +4,7 @@ import uuid
 from typing import Any
 
 import numpy as np
-import torch
-from boxmot import OcSort
+from .boxmot_ocsort import OcSort
 from prometheus_client import Counter, Histogram, Summary
 from visionapi.common_pb2 import MessageType
 from visionapi.sae_pb2 import SaeMessage
@@ -36,7 +35,6 @@ class Tracker:
         return self.get(input_proto)
 
     @GET_DURATION.time()
-    @torch.no_grad()
     def get(self, input_proto):        
 
         input_image, sae_msg = self._unpack_proto(input_proto)
@@ -93,16 +91,15 @@ class Tracker:
         return det_array
     
     @PROTO_SERIALIZATION_DURATION.time()
-    def _create_output(self, tracking_output, input_sae_msg: SaeMessage, inference_time_us):
-        output_sae_msg = SaeMessage()
-        output_sae_msg.frame.CopyFrom(input_sae_msg.frame)
+    def _create_output(self, tracking_output, sae_msg: SaeMessage, inference_time_us):
 
         # The length of detections and tracking_output can be different 
         # (as the latter only includes objects that could be matched to an id)
-        # Therefore, we can only reuse the VideoFrame and have to recreate everything else
+        # Therefore, we have to recreate the detections list
+        sae_msg.ClearField('detections')
         
         for pred in tracking_output:
-            detection = output_sae_msg.detections.add()
+            detection = sae_msg.detections.add()
             detection.bounding_box.min_x = float(pred[0])
             detection.bounding_box.min_y = float(pred[1])
             detection.bounding_box.max_x = float(pred[2])
@@ -113,9 +110,6 @@ class Tracker:
             detection.confidence = float(pred[5])
             detection.class_id = int(pred[6])
 
-        output_sae_msg.metrics.CopyFrom(input_sae_msg.metrics)
-        output_sae_msg.metrics.tracking_inference_time_us = inference_time_us
+        sae_msg.metrics.tracking_inference_time_us = inference_time_us
 
-        output_sae_msg.type = MessageType.SAE
-        
-        return output_sae_msg.SerializeToString()
+        return sae_msg.SerializeToString()
