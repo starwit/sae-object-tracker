@@ -21,8 +21,9 @@ WORKDIR /code
 
 COPY requirements.txt ./
 
+# This should be fine if and only if the wheels are generated based on the poetry exported requirements.txt (see above)
 RUN --mount=type=bind,from=build,source=/wheels,target=/wheels \
-    pip install --no-cache-dir --find-links=/wheels -r ./requirements.txt
+    pip install /wheels/*
 
 COPY main.py ./
 COPY ./objecttracker ./objecttracker
