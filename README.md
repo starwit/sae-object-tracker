@@ -5,7 +5,6 @@ This component hooks into SAE's streams of frames annotated with detected object
 
 ## How to set up
 - Make sure you have Poetry installed (otherwise see here: https://python-poetry.org/docs/#installing-with-the-official-installer)
-- Set environment variable `NVIDIA_TENSORRT_DISABLE_INTERNAL_PIP=True` (otherwise `tensorrt-*` installation will fail)
 - Run `poetry install`
 
 ## How to Build

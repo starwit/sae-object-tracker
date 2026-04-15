@@ -1,4 +1,13 @@
 # You must run `poetry export` before building this
+FROM python:3.13-slim AS build
+
+RUN apt update && apt install --no-install-recommends -y \
+    build-essential \
+    git
+
+COPY requirements.txt ./
+
+RUN pip wheel --no-cache-dir --no-deps -r requirements.txt -w /wheels
 
 FROM python:3.13-slim
 
@@ -6,13 +15,14 @@ RUN apt update && apt install --no-install-recommends -y \
     libglib2.0-0 \
     libgl1 \
     libturbojpeg0 \
-    git \
-    build-essential
+    git
 
 WORKDIR /code
 
 COPY requirements.txt ./
-RUN pip install -r ./requirements.txt
+
+RUN --mount=type=bind,from=build,source=/wheels,target=/wheels \
+    pip install --no-cache-dir --find-links=/wheels -r ./requirements.txt
 
 COPY main.py ./
 COPY ./objecttracker ./objecttracker
