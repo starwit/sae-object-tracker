@@ -1,35 +1,36 @@
-FROM starwitorg/base-python-image:0.0.15 AS build
+# You must run `poetry export` before building this
+FROM python:3.13-slim AS build
 
-ADD "https://drive.google.com/uc?id=1Kkx2zW89jq_NETu4u42CFZTMVD5Hwm6e" /code/osnet_x0_25_msmt17.pt
+RUN apt update && apt install --no-install-recommends -y \
+    build-essential \
+    git
 
+# This needs to be generated with poetry export
+COPY requirements.txt ./
 
-# Copy only files that are necessary to install dependencies
-COPY poetry.lock poetry.toml pyproject.toml /code/
+RUN pip wheel --no-cache-dir --no-deps -r requirements.txt -w /wheels
 
-WORKDIR /code
-RUN poetry install
-    
-# Copy the rest of the project
-COPY . /code/
+FROM python:3.13-slim
 
-
-### Main artifact / deliverable image
-
-FROM python:3.12-slim
 RUN apt update && apt install --no-install-recommends -y \
     libglib2.0-0 \
     libgl1 \
-    libturbojpeg0
+    libturbojpeg0 \
+    git
 
-# Create a non-root user and group
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-
-COPY --from=build --chown=appuser:appgroup /code /code
 
 WORKDIR /code
 
-# Switch to non-root user
-USER appuser
+# This needs to be generated with poetry export (same file as above)
+COPY requirements.txt ./
 
-ENV PATH="/code/.venv/bin:$PATH"
+# This should be fine if and only if the wheels are generated based on the poetry exported requirements.txt (see above)
+RUN --mount=type=bind,from=build,source=/wheels,target=/wheels \
+    pip install /wheels/*
+
+COPY --chown=appuser:appgroup main.py ./
+COPY --chown=appuser:appgroup ./objecttracker ./objecttracker
+    
+USER appuser
 CMD [ "python", "main.py" ]

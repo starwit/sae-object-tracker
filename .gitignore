@@ -11,3 +11,4 @@ cache
 !settings.template.yaml
 target
 dist
+requirements.txt

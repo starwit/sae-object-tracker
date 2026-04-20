@@ -6,23 +6,24 @@ authors = ["flonix8 <flstanek@googlemail.com>"]
 license = "AGPLv3"
 package-mode = false
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-numpy = "^1.24.0"
-pydantic = "^2.0.0"
-visionapi = { git = "https://github.com/starwit/vision-api.git", subdirectory = "python/visionapi", tag = "3.4.0" }
-visionlib = { git = "https://github.com/starwit/vision-lib.git", subdirectory = "python", tag = "0.11.2" }
-opencv-python = "^4.7.0.72"
-filterpy = "^1.4.5"
-redis = "^5.0.0"
-pydantic-settings = "^2.0.3"
-prometheus-client = "^0.17.1"
-boxmot = "13.0.8"
-pytest = "8.4.1"
+python = ">=3.10,<3.14"
+numpy = "1.26.4"
+pydantic = "2.13.1"
+pydantic-settings = "2.13.1"
+visionapi = { git = "https://github.com/starwit/vision-api.git", subdirectory = "python/visionapi", tag = "3.5.2" }
+visionlib = { git = "https://github.com/starwit/vision-lib.git", subdirectory = "python", tag = "0.14.2" }
+opencv-python = "4.11.0.86"
+filterpy = "1.4.5"
+prometheus-client = "0.25.0"
+lapx = "0.9.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "9.0.3"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "8.4.1"

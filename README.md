@@ -5,7 +5,6 @@ This component hooks into SAE's streams of frames annotated with detected object
 
 ## How to set up
 - Make sure you have Poetry installed (otherwise see here: https://python-poetry.org/docs/#installing-with-the-official-installer)
-- Set environment variable `NVIDIA_TENSORRT_DISABLE_INTERNAL_PIP=True` (otherwise `tensorrt-*` installation will fail)
 - Run `poetry install`
 
 ## How to Build
@@ -26,3 +25,9 @@ The following Github Actions are available:
 ## Dependabot Version Update
 
 With [dependabot.yml](.github/dependabot.yml) a scheduled version update via Dependabot is configured. Dependabot creates a pull request if newer versions are available and the compilation is checked via PR build.
+
+## Changelog
+
+### 3.4.0
+- Remove all support for DeepOCSort (which has not been accessible through config before, so no config changes needed)
+- Reduce Docker image size by 90%

@@ -10,26 +10,6 @@ from visionlib.pipeline.settings import LogLevel, YamlConfigSettingsSource
 class TrackingAlgorithm(str, Enum):
     OCSORT = 'OCSORT'
 
-class DeepOcSortConfig(BaseModel):
-    model_weights: str
-    device: str
-    fp16: bool
-    per_class: bool
-    det_thresh: float
-    max_age: int
-    min_hits: int
-    iou_threshold: float
-    delta_t: int
-    asso_func: str
-    inertia: float
-    w_association_emb: float
-    alpha_fixed_emb: float
-    aw_param: float
-    embedding_off: bool
-    cmc_off: bool
-    aw_off: bool
-    new_kf_off: bool
-
 class OcSortConfig(BaseModel):
     det_thresh: float = 0.2
     max_age: int = 30
@@ -51,7 +31,7 @@ class RedisConfig(BaseModel):
 
 class ObjectTrackerConfig(BaseSettings):
     log_level: LogLevel = LogLevel.WARNING
-    tracker_config: Union[DeepOcSortConfig, OcSortConfig] = OcSortConfig()
+    tracker_config: Union[OcSortConfig] = OcSortConfig()
     tracker_algorithm: TrackingAlgorithm = TrackingAlgorithm.OCSORT
     redis: RedisConfig
     prometheus_port: Annotated[int, Field(gt=1024, le=65536)] = 8000
