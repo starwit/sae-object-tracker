@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "objecttracker"
-version = "3.3.0"
+version = "4.0.0"
 description = ""
 authors = ["flonix8 <flstanek@googlemail.com>"]
 license = "AGPLv3"
