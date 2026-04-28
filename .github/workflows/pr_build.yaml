@@ -13,7 +13,7 @@ jobs:
     name: PR Build with Poetry
     runs-on: [self-hosted, linux, X64]
     container:
-        image: starwitorg/base-python-image:3.13.0
+        image: starwitorg/base-python-image:3.13.2-py3.13-ptr2.3.4
         volumes:
             - /home/githubrunner/.cache/pypoetry:/root/.cache/pypoetry
     steps:
