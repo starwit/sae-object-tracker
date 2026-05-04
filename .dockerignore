@@ -8,3 +8,4 @@ demo.py
 *.md
 *.sh
 *.yaml
+.git
