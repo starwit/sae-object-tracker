@@ -28,6 +28,10 @@ With [dependabot.yml](.github/dependabot.yml) a scheduled version update via Dep
 
 ## Changelog
 
+### 4.0.1
+- Roll back build process to use poetry from python build image
+- No code changes
+
 ### 4.0.0
 - Remove all support for DeepOCSort (which has not been accessible through config before, so no config changes needed)
 - Reduce Docker image size by 90%
